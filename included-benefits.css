@@ -1,0 +1,99 @@
+/* Four distinct benefits, illustrated in the same DG visual system. */
+.benefits-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.benefit-card{display:flex;flex-direction:column;min-width:0;padding:26px;border-radius:28px;border:1px solid transparent;background:linear-gradient(var(--glass-thick),var(--glass-thick)) padding-box,var(--rim) border-box;box-shadow:var(--edge);overflow:hidden}
+.benefit-recordings{background:radial-gradient(ellipse at 15% 0%,#ffda4510,transparent 65%) padding-box,linear-gradient(var(--glass-thick),var(--glass-thick)) padding-box,var(--rim-gold) border-box}
+.benefit-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.benefit-top>span{font:650 10px/1.5 var(--f-mono);letter-spacing:.07em;color:var(--muted)}
+.benefit-top>b{font:650 11px/1.3 var(--f-body);padding:7px 10px;border:1px solid #ffda4533;border-radius:999px;color:var(--yellow);white-space:nowrap}
+.benefit-visual{aspect-ratio:16/9;width:100%;height:auto;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:22px;isolation:isolate}
+.benefit-copy{border-top:1px solid var(--line);padding-top:18px;margin-top:auto}
+.benefit-heading{min-height:2.3em;font:800 clamp(23px,2.1vw,29px)/1.15 var(--f-display);letter-spacing:-.025em;margin:0 0 24px;text-wrap:balance}
+.benefit-heading>span{color:var(--yellow)}
+.benefit-copy p{font-size:15px;line-height:1.65;color:var(--muted);max-width:47ch;margin:0}
+.lessons-preview{display:block}
+.lesson-screen{position:relative;aspect-ratio:16/9;height:100%;width:100%;border:1px solid #ffffff24;border-radius:16px;overflow:hidden;background:#050505}
+.lesson-real-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center}
+.lesson-real-video.is-calculator{object-fit:contain;background:#f5f3ec}
+.materials-preview{perspective:900px}
+.material-sheet{width:200px;height:206px;border-radius:12px;padding:20px;border:1px solid #ffffff30;box-shadow:0 15px 35px #0005}
+.material-sheet>span{font:650 9px/1.4 var(--f-mono);letter-spacing:.06em;display:block;margin-bottom:15px}
+.material-sheet>strong{font:800 28px/1.06 var(--f-display);letter-spacing:-.025em;display:block}
+.material-back{position:absolute;left:calc(50% - 155px);top:15px;background:#25272c;color:#d1d2d8;transform:rotate(-10deg)}
+.material-back i{display:block;width:80%;height:3px;background:#ffffff22;margin-top:12px;border-radius:3px}
+.material-front{position:relative;margin-left:95px;transform:rotate(7deg);background:var(--yellow);color:#171612}
+.material-checks{display:grid;gap:3px;margin-top:12px;font-size:10px;font-weight:600}
+.benefit-top .benefit-whatsapp-label{color:#64db9c;border-color:#25d36640;display:flex;align-items:center;gap:6px}
+.benefit-whatsapp-label svg{width:14px;height:14px;flex:none}
+.wa-group{width:min(100%,370px);height:232px;background:#0b141a;border:1px solid #ffffff24;border-radius:20px;overflow:hidden;box-shadow:0 18px 35px #0004}
+.wa-group-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#1c242b;border-bottom:1px solid #ffffff0d}
+.wa-back{font:300 32px/1 var(--f-body);color:#32cf80;margin-right:2px}
+.wa-avatar{display:grid;place-items:center;width:35px;height:35px;border-radius:50%;background:var(--yellow);color:#111;font:800 14px/1 var(--f-display);flex:none}
+.wa-group-header strong{font:650 13px/1.3 var(--f-body);display:block}
+.wa-group-header small{font-size:10px;line-height:1.4;color:#a8b0b7;display:block;margin-top:3px}
+.wa-group-chat{padding:12px 16px}
+.wa-day{display:table;margin:0 auto 12px;padding:4px 9px;border-radius:6px;color:#aab7be;background:#1c2930;font:600 8px/1.4 var(--f-body)}
+.wa-message{position:relative;background:#202c33;border-radius:0 11px 11px 11px;padding:10px 12px;max-width:285px;box-shadow:0 1px 1px #0006}
+.wa-message:before{content:'';position:absolute;left:-7px;top:0;border-top:8px solid #202c33;border-left:8px solid transparent}
+.wa-message>b{font:650 11px/1.4 var(--f-body);color:#64db9c}
+.wa-message p{font:400 12px/1.5 var(--f-body);margin:4px 0 0;color:#ecf0f2}
+.wa-message p strong{font-weight:650}
+.wa-message>span{display:block;text-align:right;color:#9eaeb8;font-size:9px;line-height:1.2}
+.certificate-paper{position:relative;width:min(100%,340px);height:215px;border:1px solid #e1cf8d;background:linear-gradient(135deg,#f6f1df,#e8e3d3);border-radius:4px;padding:22px;text-align:center;color:#1e211f;transform:rotate(-4deg);box-shadow:0 18px 35px #0005;outline:1px solid #ad955a66;outline-offset:-10px}
+.certificate-paper>img{width:120px;height:auto;filter:brightness(0);margin:0 auto 17px;display:block}
+.certificate-paper>span{font:650 10px/1.4 var(--f-mono);letter-spacing:.2em;display:block;margin-bottom:10px}
+.certificate-paper>strong{font:750 22px/1.2 var(--f-display);display:block}
+.certificate-paper>i{display:block;width:65%;height:1px;background:#9b977b;margin:17px auto 7px}
+.certificate-paper>p{font-size:10px;margin:0}
+.certificate-seal{position:absolute;right:15px;bottom:12px;background:#f4cf4f;border:2px solid #b8942e;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;box-shadow:0 2px 5px #0002;outline:1px dashed #ad8824;outline-offset:-5px}
+.certificate-seal svg{width:21px;height:21px}
+.benefit-card .material-front{animation:benefit-paper 8s ease-in-out infinite;animation-play-state:paused}
+.benefit-card .wa-message{animation:benefit-message 8s ease-out infinite;animation-play-state:paused}
+.benefit-card .certificate-seal{animation:benefit-seal 8s ease-in-out infinite;animation-play-state:paused}
+.benefit-card.benefit-visible .material-front,.benefit-card.benefit-visible .wa-message,.benefit-card.benefit-visible .certificate-seal{animation-play-state:running}
+@keyframes benefit-paper{0%,100%{transform:rotate(7deg) translateY(0)}50%{transform:rotate(3deg) translateY(-5px)}}
+@keyframes benefit-message{0%{opacity:.25;transform:translateY(8px)}10%,100%{opacity:1;transform:none}}
+@keyframes benefit-seal{0%,100%{transform:scale(1)}45%{transform:scale(1.1)}}
+@media(max-width:760px){
+ .benefits-grid{grid-template-columns:minmax(0,1fr);gap:18px}
+ .benefit-card{padding:24px 20px;border-radius:22px;text-align:center}
+ .benefit-top{margin-bottom:22px;gap:8px}
+ .benefit-top>span{font-size:9px;text-align:left;max-width:45%}
+ .benefit-top>b{font-size:10px;padding:6px 8px}
+ .benefit-visual{aspect-ratio:auto;height:220px;margin-bottom:20px}.lessons-preview{height:auto;aspect-ratio:16/9}
+ .benefit-copy{padding-top:18px}.benefit-heading{font-size:26px;min-height:0;margin-bottom:22px}.benefit-copy p{font-size:15px;margin-inline:auto}
+ .material-sheet{text-align:left;width:166px;height:195px;padding:18px}.material-sheet>strong{font-size:26px}.material-sheet>span{font-size:8px}.material-front{margin-left:65px}.material-back{left:calc(50% - 125px);top:12px}
+ .wa-group{height:220px;text-align:left}.wa-group-header{padding:10px}.wa-group-header strong{font-size:12px}.wa-group-chat{padding:10px 13px}.wa-message{padding:8px 10px}.wa-message p{font-size:12px}
+ .certificate-paper{height:200px;padding:20px 16px;width:calc(100% - 10px)}.certificate-paper>strong{font-size:20px}.certificate-paper>img{width:110px}.certificate-seal{width:34px;height:34px;right:12px}
+}
+@media(max-width:360px){.benefit-card{padding:22px 16px}.benefit-heading{font-size:24px}.benefit-copy p{font-size:14px}.benefit-top>b{font-size:9px}.benefit-top>span{font-size:8px}.wa-group-header{gap:7px}.wa-avatar{width:29px;height:29px;font-size:12px}.wa-group-header strong{font-size:11px}.certificate-paper>strong{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.benefit-card *{animation:none!important;transition:none!important}}
+
+
+
+
+/* One grid and one vertical rhythm for the complete benefits section. */
+#o-que-voce-leva .included-intro{grid-template-columns:minmax(0,1fr) 320px;gap:40px;align-items:center;margin-bottom:28px}
+#o-que-voce-leva .section-heading h2{font-size:clamp(32px,3.5vw,46px);line-height:1.08;max-width:19ch}
+#o-que-voce-leva .included-offer{padding:22px 24px}
+#o-que-voce-leva .included-offer .eyebrow{margin-bottom:10px}
+#o-que-voce-leva .included-offer-price{margin:6px 0 18px}
+#o-que-voce-leva .included-offer-price strong{font-size:68px}
+#o-que-voce-leva .included-offer-price sup{font-size:30px}
+#o-que-voce-leva .included-offer .btn{min-height:52px;padding:14px 18px}
+.benefit-visual:not(.lessons-preview){border-radius:16px;background:radial-gradient(ellipse at center,#ffffff07,transparent 72%)}
+@media(min-width:761px) and (max-width:1000px){
+ .benefit-card{padding:22px}.benefit-top{flex-wrap:wrap;min-height:54px;gap:8px}.benefit-heading{font-size:24px;min-height:3.45em}
+ .benefit-visual{aspect-ratio:auto;height:220px}.lessons-preview{height:220px;display:flex;align-items:center}.lesson-screen{height:auto}
+ .material-sheet{scale:.85}.material-back{left:calc(50% - 135px)}.material-front{margin-left:70px}
+ .certificate-paper{width:calc(100% - 14px);padding-inline:15px}.certificate-paper>strong{font-size:20px}
+ .wa-group-header{padding:10px;gap:7px}.wa-group-header strong{font-size:12px}
+}
+@media(max-width:760px){
+ #o-que-voce-leva .included-intro{grid-template-columns:minmax(0,1fr);gap:24px;margin-bottom:24px}
+ #o-que-voce-leva .section-heading h2{font-size:clamp(30px,7.8vw,38px);max-width:20ch;margin-inline:auto}
+ #o-que-voce-leva .included-offer{max-width:430px;width:100%;padding:22px}
+ .benefit-top{min-height:28px;margin-bottom:16px}.benefit-card{padding:24px 20px}
+ .benefit-visual:not(.lessons-preview){margin-inline:auto}
+ .benefit-copy p{max-width:36ch}
+}
+@media(max-width:360px){.benefit-card{padding:22px 16px}.benefit-top{flex-wrap:wrap;justify-content:center;gap:8px}.benefit-top>span{max-width:none;text-align:center}}

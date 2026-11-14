@@ -1,0 +1,33 @@
+/* Mobile QA: reachable controls, readable supporting copy and demonstration-first bonus flow. */
+@media(max-width:760px){
+ .campaign-nav a:first-child,footer .footer-inner>a{display:inline-flex;align-items:center;min-height:44px}
+ .campaign-nav .nav-cta{min-height:44px}
+ .hero-actions .text-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px}
+ .audience-grid article>a{display:flex;align-items:center;justify-content:center;min-height:44px}
+ .footer-inner nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;width:min(100%,320px)}
+ .footer-inner nav a{display:flex;align-items:center;justify-content:center;min-height:44px;font-size:14px}
+ #o-que-voce-leva .included-feature{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center!important;gap:12px}
+ #o-que-voce-leva .included-feature .oversized{margin:0;font-size:80px;line-height:1}
+ #bonus .growth-layout{gap:0}
+ #bonus .growth-copy{display:contents}
+ #bonus .growth-copy>.eyebrow{order:1;text-align:center;font-size:11px;margin:0 0 14px}
+ #bonus .growth-copy>h2{order:2;text-align:center;margin:0 0 20px}
+ #bonus .growth-copy>p:not(.eyebrow):not(.fine-print){order:3;text-align:center;max-width:40ch;margin:0 auto 28px}
+ #bonus .gk-showcase{order:4;margin:0 auto 24px}
+ #bonus .growth-features{order:5;width:100%;margin:0 auto 22px}
+ #bonus .growth-copy>.fine-print{order:6;text-align:center;font-size:12px;line-height:1.6;margin:0 0 24px}
+ #bonus .growth-copy>.btn{order:7;margin:0 auto}
+ .gk-showcase{scroll-margin-top:12px}
+ .gk-course-scene.is-active{display:flex;flex-direction:column;justify-content:flex-start}
+ .gk-showcase .cs-b input[type=range]{height:44px}
+ .aut-selo-card[aria-pressed=true]{outline:2px solid var(--yellow);outline-offset:-2px}
+ .autoridade .sl-infos:focus-visible{outline:2px solid var(--yellow);outline-offset:4px}
+ .ticket-dates span,.ticket-footer,.ticket-top,.event-chips li{font-size:11px}
+ .ticket-benefits{font-size:12px}
+ .pl-topic:focus-visible,.growth-features>button:focus-visible,.faq-item summary:focus-visible,.footer-inner nav a:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
+}
+@media(max-width:360px){
+ .campaign-nav .brand{width:132px}
+ .campaign-nav .nav-cta{padding-inline:12px;font-size:11px}
+ .event-chips{justify-content:center}
+}
