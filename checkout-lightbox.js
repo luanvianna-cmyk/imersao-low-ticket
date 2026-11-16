@@ -37,12 +37,32 @@
 
   const cfg = window.DG_CHECKOUT, dialog = document.getElementById('dg-checkout');
   /* Sem <dialog> ou sem a configuração, os CTAs seguem pelo href de sempre. */
-  if (!cfg || !dialog || typeof dialog.showModal !== 'function') return;
+  if (!cfg || !dialog || typeof dialog.showModal !== 'function' || !window.DG_CHECKOUT_REQUEST) return;
 
   const $ = (selector) => dialog.querySelector(selector);
   const form = $('form'), submit = $('.dg-ck-submit'), submitLabel = $('[data-ck="submit-label"]'), alertBox = $('[data-ck="alert"]');
   const brl = (cents) => (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   const product = cfg.product, bump = cfg.bump;
+  const postJson = window.DG_CHECKOUT_REQUEST.postJson;
+
+  // Mobile keyboards resize the visual viewport, not necessarily 100dvh.
+  function measureViewport() {
+    if (!dialog.open) return;
+    const viewport = window.visualViewport;
+    const height = viewport ? viewport.height : innerHeight;
+    dialog.style.setProperty('--ck-visible-height', height + 'px');
+    dialog.style.setProperty('--ck-visible-top', (viewport ? viewport.offsetTop : 0) + 'px');
+    dialog.classList.toggle('dg-ck-compact', height < 540);
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', measureViewport);
+    window.visualViewport.addEventListener('scroll', measureViewport);
+  }
+  addEventListener('resize', measureViewport, { passive: true });
+  document.querySelectorAll('[data-checkout-open]').forEach(trigger => {
+    trigger.setAttribute('aria-haspopup', 'dialog');
+    trigger.setAttribute('aria-controls', dialog.id);
+  });
 
   /* ── regras dos campos (as mesmas do servidor) ─────────────────────────── */
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/, CONTROL_RE = /\p{Cc}/gu;
@@ -90,7 +110,8 @@
     const errors = {}, email = normalizeEmail(inputs.email.value), confirm = normalizeEmail(inputs.emailConfirm.value);
     if (!normalizeName(inputs.name.value)) errors.name = 'Digite seu nome.';
     if (!email) errors.email = 'Digite um e-mail válido.';
-    if (!confirm || confirm !== email) errors.emailConfirm = 'Os e-mails não são iguais.';
+    if (!inputs.emailConfirm.value.trim()) errors.emailConfirm = 'Repita seu e-mail de acesso.';
+    else if (!confirm || confirm !== email) errors.emailConfirm = 'Os e-mails não são iguais. Confira os dois campos.';
     if (!normalizePhone(inputs.phone.value)) errors.phone = 'Digite um WhatsApp com DDD, por exemplo (11) 90000-0000.';
     return errors;
   }
@@ -103,11 +124,11 @@
       errorNodes[key].hidden = !message;
       if (message) inputs[key].setAttribute('aria-invalid', 'true'); else inputs[key].removeAttribute('aria-invalid');
     });
-    const valid = Object.keys(errors).length === 0;
-    emailHint.classList.toggle('is-ok', valid);
-    emailHint.textContent = valid
-      ? 'Enviamos para ' + inputs.email.value.trim() + ' assim que o pagamento confirmar.'
-      : 'O acesso e a senha chegam neste e-mail. Confira antes de pagar.';
+    const emailMatches = !errors.email && !errors.emailConfirm;
+    emailHint.classList.toggle('is-ok', emailMatches);
+    emailHint.textContent = emailMatches
+      ? 'E-mails conferem. Seu acesso será enviado para este endereço.'
+      : 'Seu acesso será enviado para este e-mail.';
     return errors;
   }
   ORDER.forEach((key) => {
@@ -130,6 +151,7 @@
 
   function setText(name, value) { const node = $('[data-ck="' + name + '"]'); if (node) node.textContent = value; }
   function renderTotals() {
+    setText('bump-action', bumpOn() ? 'Adicionado ao meu pedido' : 'Adicionar ao meu pedido');
     const discount = coupon && !coupon.pending ? coupon.discountCents : 0;
     $('[data-ck="line-product"]').hidden = !(discount > 0 || bumpOn());
     $('[data-ck="line-discount"]').hidden = !(discount > 0);
@@ -173,8 +195,7 @@
     couponBusy = true; couponNote(''); renderCoupon();
     let data = null;
     try {
-      const response = await fetch('/api/cupom', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
-      data = await response.json().catch(() => null);
+      ({ data } = await postJson('/api/cupom', { code }));
     } catch { /* sem resposta: o cupom segue para ser conferido no pagamento */ }
     couponBusy = false;
     if (data && data.ok && data.code) {
@@ -205,7 +226,10 @@
   setText('price-compare', brl(product.compareAtCents));
   setText('line-product-value', brl(product.priceCents));
   if (bumpAvailable) {
-    setText('bump-title', bump.headline);
+    setText('bump-title', bump.targetTitle);
+    const cover = $('[data-ck="bump-cover"]');
+    cover.src = bump.cover;
+    cover.alt = 'Capa do e-book ' + bump.targetTitle;
     setText('bump-body', bump.body);
     setText('bump-price', '+ ' + brl(bump.priceCents));
     setText('line-bump-value', brl(bump.priceCents));
@@ -221,7 +245,7 @@
   function setBusy(value, label) {
     busy = value;
     submit.disabled = value;
-    submitLabel.textContent = label || 'Garantir minha vaga';
+    submitLabel.textContent = label || 'Continuar para pagamento';
     form.setAttribute('aria-busy', String(value));
   }
   function track(event, detail) {
@@ -233,6 +257,7 @@
     opener = trigger || null;
     notice('');
     dialog.showModal();
+    measureViewport();
     document.documentElement.classList.add('dg-ck-open');
     renderFields(); renderCoupon();
     const first = ORDER.map((key) => inputs[key]).find((input) => !input.value) || inputs.name;
@@ -304,18 +329,13 @@
 
     let response = null, data = null;
     try {
-      response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          guest: { name: inputs.name.value, email: inputs.email.value, phone: inputs.phone.value },
-          bump: withBump,
-          coupon: coupon ? coupon.code : undefined,
-          utm: collectUtm(),
-          attribution: collectAttribution()
-        })
-      });
-      data = await response.json().catch(() => null);
+      ({ response, data } = await postJson('/api/checkout', {
+        guest: { name: inputs.name.value, email: inputs.email.value, phone: inputs.phone.value },
+        bump: withBump,
+        coupon: coupon ? coupon.code : undefined,
+        utm: collectUtm(),
+        attribution: collectAttribution()
+      }));
     } catch { /* rede fora do ar: cai na página de venda */ }
 
     if (response && response.ok && data && typeof data.url === 'string' && data.url) {

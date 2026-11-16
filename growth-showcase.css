@@ -23,6 +23,8 @@
 .growth-features .gk-feature-copy>span{font-size:13px;line-height:1.5}
 .gk-showcase .cs-abas{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
 .gk-showcase .cs-aba{font-size:12px;min-width:0;padding:0 4px}
+.gk-showcase .calc-sim{pointer-events:none;user-select:none}
+.gk-showcase .calc-sim *{cursor:default!important}
 .gk-showcase .cs-desc{font-size:13px!important;line-height:1.4!important}
 .gk-showcase .cs-barras{gap:10px 16px}
 .gk-showcase .cs-b label,.gk-showcase .cs-b output{font-size:12px}

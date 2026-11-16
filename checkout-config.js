@@ -26,6 +26,8 @@
       headline: 'Adicionar o E-book Estratégias Avançadas para Escalar no Mercado Livre',
       body: 'Estratégias avançadas para escalar documentadas e detalhadas em um material didático',
       targetTitle: 'Estratégias avançadas para Escalar no Mercado Livre',
+      cover: 'assets/ebook-estrategias-avancadas-828.webp',
+      coverSource: 'https://vhnfuqpouypankrmcsbw.supabase.co/storage/v1/object/public/covers/products/eb59e839-c368-46ea-bbc4-f802db632905/cover-1789442595215.png',
       priceCents: 2990
     }
   };

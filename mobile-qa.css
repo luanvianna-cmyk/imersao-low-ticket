@@ -1,4 +1,12 @@
 /* Mobile QA: reachable controls, readable supporting copy and demonstration-first bonus flow. */
+.mobile-proof-section[hidden]{display:none}
+@media(max-width:760px){
+ .mobile-proof-relocated #hero{padding-bottom:calc(var(--ribbon-seam-height) / 2 + 12px)}
+ .mobile-proof-relocated #para-quem{padding-top:calc(var(--ribbon-seam-height) / 2 + 40px)}
+ .mobile-proof-section{padding:40px 0 20px;border-top:1px solid var(--line);background:radial-gradient(ellipse at 50% 0%,#ffda4508,transparent 70%)}
+ .mobile-proof-section .hero-seals{padding-top:0;padding-bottom:32px}
+ .mobile-proof-section .trust-strip{padding-top:24px;padding-bottom:36px}
+}
 @media(max-width:760px){
  .campaign-nav a:first-child,footer .footer-inner>a{display:inline-flex;align-items:center;min-height:44px}
  .campaign-nav .nav-cta{min-height:44px}

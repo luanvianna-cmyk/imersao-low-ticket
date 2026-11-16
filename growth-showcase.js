@@ -4,7 +4,7 @@
  const root=document.querySelector('.gk-showcase');if(!root)return;
  const scenes=[...root.querySelectorAll('[data-gk-scene]')],buttons=[...document.querySelectorAll('[data-gk-select]')];
  const reduce=matchMedia('(prefers-reduced-motion:reduce)'),video=root.querySelector('video');
- const captions=['DG Growth Kit + Imersão Mercado Ads','Experimente as calculadoras do Growth Kit','Agentes de IA em uso','Trecho real do curso de uso'];
+ const captions=['DG Growth Kit + Imersão Mercado Ads','Veja as calculadoras do Growth Kit em ação','Agentes de IA em uso','Trecho real do curso de uso'];
  let current=0,visible=false,timers=[],frame=0,manualUntil=0;
  const canRun=()=>visible&&!document.hidden&&!reduce.matches;
  function stop(){timers.forEach(clearTimeout);timers=[];cancelAnimationFrame(frame);frame=0;video.pause();root.classList.remove('is-running')}
@@ -16,11 +16,15 @@
  }
  function calculatorDemo(){
   const tabs=[...root.querySelectorAll('.cs-aba')];
+  root.querySelectorAll('.calc-sim input').forEach(input=>{
+   input.value=input.defaultValue;
+   input.dispatchEvent(new Event('input',{bubbles:true}));
+  });
   tabs[0].click();
   after(650,()=>moveRange(root.querySelector('#cs-preco-margem'),22));
   after(2900,()=>{tabs[1].click();moveRange(root.querySelector('#cs-lucro-preco'),175)});
   after(5600,()=>{tabs[2].click();moveRange(root.querySelector('#cs-roas-valor'),3500)});
-  after(8200,()=>tabs[3].click());
+  after(8200,()=>{tabs[3].click();moveRange(root.querySelector('#cs-tacos-gasto'),1800)});
  }
  function chatDemo(){
   const messages=[...root.querySelectorAll('.ag-m')],people=[...root.querySelectorAll('.ag-p')];
@@ -36,14 +40,14 @@
  }
  function show(k,manual=false){
   stop();current=k;
-  if(manual)manualUntil=Date.now()+24000;
+  if(manual)manualUntil=k===1?0:Date.now()+24000;
   scenes.forEach((scene,i)=>{const on=i===k;scene.classList.toggle('is-active',on);scene.inert=!on;scene.setAttribute('aria-hidden',String(!on))});
   buttons.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.gkSelect===k)));
   root.querySelector('.gk-scene-caption').textContent=captions[k];
   if(k===2)chatDemo();
   if(!canRun())return;
   root.classList.add('is-running');
-  if(k===1&&!manual&&Date.now()>=manualUntil)calculatorDemo();
+  if(k===1)calculatorDemo();
   if(k===3){
    if(!video.src)video.src=video.dataset.src;
    video.muted=true;video.play().catch(()=>{});
@@ -56,10 +60,6 @@
   });
  }
  buttons.forEach(b=>b.addEventListener('click',()=>{show(+b.dataset.gkSelect,true);if(matchMedia('(max-width:760px)').matches)root.scrollIntoView({block:'start',behavior:reduce.matches?'auto':'smooth'})}));
- // A person manipulating a calculator owns it; the demo never moves their input.
- root.addEventListener('pointerdown',e=>{if(e.target.closest('.calc-sim')){stop();manualUntil=Date.now()+24000}});
- root.addEventListener('keydown',e=>{if(e.target.closest('.calc-sim')){stop();manualUntil=Date.now()+24000}});
- root.addEventListener('focusout',()=>{if(canRun())after(24000,()=>{if(!root.contains(document.activeElement))show((current+1)%scenes.length)})});
  function sync(){if(canRun())show(current);else {stop();if(reduce.matches&&current===2)chatDemo()}}
  new IntersectionObserver(es=>{visible=es[0].isIntersecting;sync()}, {threshold:.25}).observe(root);
  document.addEventListener('visibilitychange',sync);reduce.addEventListener('change',sync);
