@@ -1,8 +1,9 @@
 /* Produto vendido pelo lightbox. Fonte única: o navegador usa para exibir
    preços e as funções em /api usam para montar o pedido ao DG Labs.
    Os valores espelham a página https://dglabs.app/p/imersao-mercado-ads-turma-05
-   (conferidos em 16/11/2026). O preço cobrado é sempre o do DG Labs: se o
-   cadastro mudar lá, atualize aqui para a tela não mostrar outro valor. */
+   Preço aprovado da Imersão: R$ 39,90 (3x de R$ 13,30), reconferido
+   na página pública em 16/11/2026 após a correção do cadastro por Luan.
+   O preço cobrado é sempre o do DG Labs; esta configuração não altera o cadastro. */
 (function (root, factory) {
   var config = factory();
   if (typeof module === 'object' && module.exports) module.exports = config;
@@ -16,7 +17,7 @@
       terms: { billingMode: null, accessDays: null },
       title: 'Imersão Mercado Ads: Do Zero ao Lucro',
       label: 'Turma 05 · Black Friday',
-      priceCents: 3939,
+      priceCents: 3990,
       compareAtCents: 19990,
       maxInstallments: 3
     },
@@ -26,9 +27,10 @@
       headline: 'Adicionar o E-book Estratégias Avançadas para Escalar no Mercado Livre',
       body: 'Estratégias avançadas para escalar documentadas e detalhadas em um material didático',
       targetTitle: 'Estratégias avançadas para Escalar no Mercado Livre',
-      cover: 'assets/ebook-estrategias-avancadas-828.webp',
-      coverSource: 'https://vhnfuqpouypankrmcsbw.supabase.co/storage/v1/object/public/covers/products/eb59e839-c368-46ea-bbc4-f802db632905/cover-1789442595215.png',
-      priceCents: 2990
+      cover: 'assets/ebook-estrategias-capa-ml-inline.webp',
+      coverSource: 'docs/ebook-cover-ml-inline.md',
+      priceCents: 2990,
+      compareAtCents: 3990
     }
   };
 });

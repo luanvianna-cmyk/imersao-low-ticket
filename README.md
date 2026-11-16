@@ -20,7 +20,7 @@ Como funciona:
 
 - O DG Labs não aceita chamada de navegador vinda de outro domínio nem pode ser embutido em iframe. Por isso o lightbox posta em `/api/checkout`, na mesma origem, e a função repassa o pedido a `POST https://dglabs.app/api/checkout/public` de servidor para servidor. `/api/cupom` faz o mesmo com a prévia do cupom.
 - Produto, order bump e preços exibidos ficam em `checkout-config.js`, usado pela tela e pelas funções. Se o produto ou a oferta mudarem no DG Labs (id, preço, parcelas), atualize esse arquivo.
-- O valor cobrado é sempre o do cadastro no DG Labs. Em 16/11/2026 o produto estava a R$ 39,39 (3x de R$ 13,13); os textos da LP anunciam R$ 39,90.
+- O valor cobrado é sempre o do cadastro no DG Labs. Em 16/11/2026, após a correção por Luan, a página pública foi reconferida: R$ 39,90 (3x de R$ 13,30), alinhado à LP e ao lightbox local. Com o e-book opcional de R$ 29,90, o total local é R$ 69,80. Nenhum pagamento foi criado nesta conferência.
 - Quando o repasse não consegue criar a cobrança (limite de tentativas, DG Labs fora do ar, cadastro alterado), o comprador é levado para a página de venda do DG Labs com a campanha e o cupom na URL, e conclui a compra lá.
 
 Limites de repassar o pedido sem alterar o DG Labs:

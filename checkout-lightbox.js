@@ -218,7 +218,14 @@
     cover.src = bump.cover;
     cover.alt = 'Capa do e-book ' + bump.targetTitle;
     setText('bump-body', bump.body);
-    setText('bump-price', '+ ' + brl(bump.priceCents));
+    const hasBumpDiscount = bump.compareAtCents > bump.priceCents && bump.priceCents >= 0;
+    setText('bump-price', (hasBumpDiscount ? 'por ' : '+ ') + brl(bump.priceCents));
+    $('[data-ck="bump-was"]').hidden = !hasBumpDiscount;
+    $('[data-ck="bump-discount"]').hidden = !hasBumpDiscount;
+    if (hasBumpDiscount) {
+      setText('bump-compare', brl(bump.compareAtCents));
+      setText('bump-discount', Math.round((1 - bump.priceCents / bump.compareAtCents) * 100) + '% OFF');
+    }
     setText('line-bump-value', brl(bump.priceCents));
   } else bumpBox.hidden = true;
 
