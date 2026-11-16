@@ -222,6 +222,17 @@
     setText('line-bump-value', brl(bump.priceCents));
   } else bumpBox.hidden = true;
 
+  // Celebrate once per opening, only when the bonus is actually visible.
+  const bonusCard = $('.dg-ck-bonus');
+  const bonusMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const bonusObserver = bonusCard && 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+    if (!dialog.open || bonusMotion.matches) return;
+    if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= .55)) {
+      bonusCard.classList.add('is-celebrating');
+      bonusObserver.unobserve(bonusCard);
+    }
+  }, { threshold: .55 }) : null;
+
   /* ── abrir e fechar ────────────────────────────────────────────────────── */
   let busy = false, opener = null;
   function notice(message, info) {
@@ -245,6 +256,7 @@
     notice('');
     dialog.showModal();
     measureViewport();
+    if (bonusObserver && !bonusMotion.matches) bonusObserver.observe(bonusCard);
     document.documentElement.classList.add('dg-ck-open');
     renderFields(); renderCoupon();
     const first = ORDER.map((key) => inputs[key]).find((input) => !input.value) || inputs.name;
@@ -255,6 +267,8 @@
   /* A limpeza roda aqui, na hora, e não só no evento `close`: ele chega depois
      e a página não pode ficar com a rolagem travada nesse intervalo. */
   function afterClose() {
+    bonusObserver?.disconnect();
+    bonusCard?.classList.remove('is-celebrating');
     document.documentElement.classList.remove('dg-ck-open');
     if (opener && document.contains(opener)) opener.focus({ preventScroll: true });
     opener = null;
