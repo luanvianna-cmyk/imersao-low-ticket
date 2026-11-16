@@ -201,3 +201,30 @@ h3{font-weight:700;font-size:26px;line-height:1.15}
 }
 
 .hero-sub .hero-sub-highlight{display:block;margin-top:12px;color:var(--paper);font-family:var(--f-display);font-size:clamp(24px,2.2vw,30px);font-weight:800;line-height:1.2;letter-spacing:-.02em;text-wrap:balance}
+
+/* Course name leads the hero; partnership and campaign remain supporting copy. */
+ .hero h2.hero-promise{margin:0 0 18px;max-width:570px;font-family:var(--f-display);font-size:clamp(24px,2.1vw,30px);font-weight:800;line-height:1.25;letter-spacing:-.02em;color:var(--paper);text-wrap:balance}
+.hero-promise span{color:var(--ml-yellow,#ffe23d)}
+.hero-partnership{margin:0 0 30px;max-width:570px;color:var(--muted);font-size:18px;font-weight:700;line-height:1.5;text-wrap:balance}
+@media(max-width:760px){.hero h2.hero-promise{max-width:440px;margin-inline:auto;font-size:clamp(22px,5.8vw,26px)}.hero-partnership{max-width:440px;margin-inline:auto;font-size:16px}}
+
+/* Floating gold workshop seal, anchored over the ticket corner. */
+.hero-ticket{position:relative;overflow:visible}
+.hero-ticket .ticket-top{min-height:38px;align-items:center;justify-content:flex-end}
+.hero-ticket .ticket-edition{flex-shrink:0;text-align:right}
+.ticket-partner-seal{position:absolute;z-index:3;top:-38px;left:-28px;width:132px;height:132px;filter:drop-shadow(0 8px 9px #0007);transform:rotate(-12deg);animation:ticket-seal-float 6s ease-in-out infinite;pointer-events:none}
+.ticket-seal-medallion{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:8px;overflow:hidden;clip-path:polygon(50.00% 0.00%,53.73% 2.65%,57.82% 0.62%,61.09% 3.81%,65.45% 2.45%,68.18% 6.12%,72.70% 5.45%,74.82% 9.50%,79.39% 9.55%,80.85% 13.88%,85.36% 14.64%,86.12% 19.15%,90.45% 20.61%,90.50% 25.18%,94.55% 27.30%,93.88% 31.82%,97.55% 34.55%,96.19% 38.91%,99.38% 42.18%,97.35% 46.27%,100.00% 50.00%,97.35% 53.73%,99.38% 57.82%,96.19% 61.09%,97.55% 65.45%,93.88% 68.18%,94.55% 72.70%,90.50% 74.82%,90.45% 79.39%,86.12% 80.85%,85.36% 85.36%,80.85% 86.12%,79.39% 90.45%,74.82% 90.50%,72.70% 94.55%,68.18% 93.88%,65.45% 97.55%,61.09% 96.19%,57.82% 99.38%,53.73% 97.35%,50.00% 100.00%,46.27% 97.35%,42.18% 99.38%,38.91% 96.19%,34.55% 97.55%,31.82% 93.88%,27.30% 94.55%,25.18% 90.50%,20.61% 90.45%,19.15% 86.12%,14.64% 85.36%,13.88% 80.85%,9.55% 79.39%,9.50% 74.82%,5.45% 72.70%,6.12% 68.18%,2.45% 65.45%,3.81% 61.09%,0.62% 57.82%,2.65% 53.73%,0.00% 50.00%,2.65% 46.27%,0.62% 42.18%,3.81% 38.91%,2.45% 34.55%,6.12% 31.82%,5.45% 27.30%,9.50% 25.18%,9.55% 20.61%,13.88% 19.15%,14.64% 14.64%,19.15% 13.88%,20.61% 9.55%,25.18% 9.50%,27.30% 5.45%,31.82% 6.12%,34.55% 2.45%,38.91% 3.81%,42.18% 0.62%,46.27% 2.65%);background:conic-gradient(from 25deg,#98651b,#fff0a6 10%,#c28b29 24%,#ffe8a0 39%,#a16916 52%,#f5d77d 69%,#fff0b0 80%,#ac7722 94%,#98651b);color:#51330d}
+.ticket-seal-medallion::before{content:"";position:absolute;z-index:-1;inset:8px;border-radius:50%;border:3px double #88601d;background:radial-gradient(ellipse at 28% 20%,#fff2b2,#e9c465 55%,#b78024);box-shadow:inset 0 1px 1px #fff6c9,inset 0 -2px 5px #85581766,0 0 0 2px #ffe8a37a}
+.ticket-seal-medallion::after{content:"";position:absolute;inset:-35%;background:linear-gradient(110deg,transparent 35%,#fff9dd00 42%,#fff9ddd9 49%,#fff9dd00 56%,transparent 63%);transform:translateX(-100%);animation:ticket-seal-shine 5.5s ease-in-out infinite;mix-blend-mode:screen;pointer-events:none}
+.ticket-seal-label{font:800 10px/1.2 var(--f-body);letter-spacing:.12em;text-align:center;text-shadow:0 1px 0 #fff5c6}
+.ticket-seal-medallion img{display:block;width:94px;height:auto;object-fit:contain;filter:none}
+.ticket-seal-detail{font-size:7px;line-height:1;letter-spacing:3px;color:#805311}
+@keyframes ticket-seal-shine{0%,55%{transform:translateX(-100%)}80%,100%{transform:translateX(100%)}}
+@keyframes ticket-seal-float{0%,100%{transform:translateY(0) rotate(-12deg)}50%{transform:translateY(-4px) rotate(-10deg)}}
+@media(max-width:760px){.ticket-motion-stage{margin-top:30px}.ticket-partner-seal{width:112px;height:112px;top:-34px;left:-7px}.ticket-seal-medallion{gap:6px}.ticket-seal-label{font-size:8px}.ticket-seal-medallion img{width:80px}.hero-ticket .ticket-top{min-height:40px}.hero-ticket .ticket-edition{font-size:9px}}
+@media(max-width:359px){.ticket-partner-seal{width:104px;height:104px;left:-4px;top:-30px}.ticket-seal-medallion img{width:74px}.hero-ticket .ticket-edition{font-size:8px;letter-spacing:0}}
+@media(prefers-reduced-motion:reduce){.ticket-partner-seal,.ticket-seal-medallion::after{animation:none}.ticket-seal-medallion::after{display:none}}
+
+/* Platform identity matches the DG Labs Home. */
+.campaign-nav .brand.brand-dglabs,.footer-inner .brand.brand-dglabs{display:block;width:152px;height:auto;object-fit:contain;filter:none}
+@media(max-width:600px){.campaign-nav .brand.brand-dglabs,.footer-inner .brand.brand-dglabs{width:132px}}
