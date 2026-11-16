@@ -243,3 +243,29 @@ html.dg-ck-open{overflow:hidden}
  .dg-ck-bump{grid-template-columns:84px minmax(0,1fr);gap:10px;padding:12px}
  .dg-ck-bump-title{font-size:16px}
 }
+
+.dg-ck-email-suggestion{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:12px;line-height:1.4;color:var(--muted)}
+.dg-ck-email-suggestion button{min-height:44px;max-width:100%;padding:6px 10px;border:1px solid #ffda4540;border-radius:10px;background:#ffda450c;color:var(--yellow);font:600 13px/1.4 var(--f-body);overflow-wrap:anywhere;text-align:left;cursor:pointer}
+.dg-ck-email-suggestion button:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
+.dg-ck-fields .dg-ck-hint{line-height:1.45}
+.dg-ck label.dg-ck-label{font-size:14px}
+.dg-ck-fields .dg-ck-hint,.dg-ck-fields .dg-ck-error,.dg-ck-intro{font-size:13px;line-height:1.5}
+
+/* Readable, guided entry; confirmation remains mandatory and independently typed. */
+.dg-ck label.dg-ck-label{font-size:15px;font-weight:650}
+.dg-ck-input::placeholder{font-size:16px;color:#a3a8b3}
+.dg-ck-fields .dg-ck-hint,.dg-ck-intro{color:#b8bec9}
+.dg-ck-fields .dg-ck-hint.is-ok{color:#9be7a8}
+.dg-ck-hint.is-ok::before{content:'✓ ';font-weight:700}
+.dg-ck-input.is-confirmed:not(:focus-visible){border-color:#9be7a870}
+.dg-ck-row{scroll-margin-block:20px}
+.dg-ck-body{scroll-padding-block:20px}
+@media(max-width:840px){
+ .dg-ck-fields{border:0;background:none;padding:0;gap:18px}
+ .dg-ck-input{height:56px;padding-inline:14px}
+ .dg-ck-fields .dg-ck-hint,.dg-ck-fields .dg-ck-error,.dg-ck-intro{font-size:14px}
+ .dg-ck-compact .dg-ck-head{padding-block:12px}
+ .dg-ck-compact .dg-ck-identity{margin-bottom:6px}
+ .dg-ck-compact .dg-ck-head h2{font-size:21px}
+ .dg-ck-compact .dg-ck-title-detail{font-size:16px;margin-top:4px}
+}

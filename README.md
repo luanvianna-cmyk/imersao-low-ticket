@@ -14,7 +14,7 @@ Versão da LP revisada em 13/11/2026, correspondente ao commit `6671b59733b871f5
 
 ## Integração comercial
 
-Os CTAs abrem um lightbox de checkout na própria LP (`checkout-lightbox.js` e `.css`, marcação no fim do `index.html`). Ele repete o formulário da página de venda da Turma 05 no DG Labs, `https://dglabs.app/p/imersao-mercado-ads-turma-05`: nome, e-mail, confirmação do e-mail, WhatsApp, order bump do e-book e cupom. Ao enviar, o comprador segue para o Mercado Pago e volta para a página de obrigado do DG Labs, pelo fluxo que já existe lá.
+Os CTAs abrem um lightbox de checkout na própria LP (`checkout-lightbox.js` e `.css`, marcação no fim do `index.html`). Ele coleta os dados necessários ao checkout da Turma 05 no DG Labs, `https://dglabs.app/p/imersao-mercado-ads-turma-05`: nome, e-mail, confirmação obrigatória do e-mail e WhatsApp, com order bump do e-book e cupom opcionais. Os dois e-mails precisam coincidir; sugestões de correção de domínio nunca alteram a confirmação automaticamente. Ao enviar, o comprador segue para o Mercado Pago e volta para a página de obrigado do DG Labs, pelo fluxo que já existe lá.
 
 Como funciona:
 

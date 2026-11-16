@@ -1,4 +1,4 @@
-/* Lightbox de checkout: o mesmo formulário da página de venda do DG Labs, aberto
+/* Lightbox de checkout: pré-cadastro simplificado para a página de venda do DG Labs, aberto
    pelos CTAs da LP. O envio vai para /api/checkout (mesma origem), que cria a
    cobrança no DG Labs e devolve o link do Mercado Pago. Validação e máscara
    seguem src/lib/payments/payment-fields.ts e src/lib/phone.ts do DG Labs. */
@@ -37,7 +37,7 @@
 
   const cfg = window.DG_CHECKOUT, dialog = document.getElementById('dg-checkout');
   /* Sem <dialog> ou sem a configuração, os CTAs seguem pelo href de sempre. */
-  if (!cfg || !dialog || typeof dialog.showModal !== 'function' || !window.DG_CHECKOUT_REQUEST) return;
+  if (!cfg || !dialog || typeof dialog.showModal !== 'function' || !window.DG_CHECKOUT_REQUEST || !window.DG_CHECKOUT_FIELDS) return;
 
   const $ = (selector) => dialog.querySelector(selector);
   const form = $('form'), submit = $('.dg-ck-submit'), submitLabel = $('[data-ck="submit-label"]'), alertBox = $('[data-ck="alert"]');
@@ -64,58 +64,18 @@
     trigger.setAttribute('aria-controls', dialog.id);
   });
 
-  /* ── regras dos campos (as mesmas do servidor) ─────────────────────────── */
-  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/, CONTROL_RE = /\p{Cc}/gu;
-  function normalizeName(raw) {
-    const value = raw.normalize('NFKC').replace(CONTROL_RE, '').replace(/\s+/g, ' ').trim();
-    if (value.length < 2 || value.length > 60) return null;
-    const lower = value.toLowerCase();
-    return lower.includes('@') || lower.includes('http') || lower.includes('://') ? null : value;
-  }
-  function normalizeEmail(raw) {
-    const value = raw.normalize('NFKC').trim().toLowerCase();
-    if (!value || value.length > 254 || /\p{Cc}/u.test(value) || !EMAIL_RE.test(value)) return null;
-    return value;
-  }
-  function normalizePhone(raw) {
-    let digits = raw.replace(/\D+/g, '');
-    if (!digits) return null;
-    if (digits.length === 12 || digits.length === 13) {
-      if (!digits.startsWith('55')) return null;
-      digits = digits.slice(2);
-    }
-    if (digits.length !== 10 && digits.length !== 11) return null;
-    if (digits[0] === '0' || digits[1] === '0') return null;
-    if (digits.length === 11 && digits[2] !== '9') return null;
-    return '+55' + digits;
-  }
-  function maskPhone(raw) {
-    let digits = raw.replace(/\D+/g, '');
-    const international = raw.trim().startsWith('+');
-    if (digits.startsWith('55') && ((international && (digits.length === 12 || digits.length === 13)) || digits.length === 13)) digits = digits.slice(2);
-    digits = digits.slice(0, 11);
-    if (!digits) return '';
-    if (digits.length <= 2) return '(' + digits;
-    const ddd = digits.slice(0, 2), rest = digits.slice(2);
-    if (rest.length <= 4) return '(' + ddd + ') ' + rest;
-    const split = rest.length === 9 ? 5 : 4;
-    return '(' + ddd + ') ' + rest.slice(0, split) + '-' + rest.slice(split);
-  }
-
+  /* Email confirmation is required; keep the fields in a single reading order. */
+  const { normalizeName, normalizeEmail, normalizePhone, formatPhone, suggestEmail, validate } = window.DG_CHECKOUT_FIELDS;
   const ORDER = ['name', 'email', 'emailConfirm', 'phone'];
   const inputs = Object.fromEntries(ORDER.map((key) => [key, $('[data-ck-field="' + key + '"]')]));
   const errorNodes = Object.fromEntries(ORDER.map((key) => [key, $('[data-ck-error="' + key + '"]')]));
   const touched = {};
   function fieldErrors() {
-    const errors = {}, email = normalizeEmail(inputs.email.value), confirm = normalizeEmail(inputs.emailConfirm.value);
-    if (!normalizeName(inputs.name.value)) errors.name = 'Digite seu nome.';
-    if (!email) errors.email = 'Digite um e-mail válido.';
-    if (!inputs.emailConfirm.value.trim()) errors.emailConfirm = 'Repita seu e-mail de acesso.';
-    else if (!confirm || confirm !== email) errors.emailConfirm = 'Os e-mails não são iguais. Confira os dois campos.';
-    if (!normalizePhone(inputs.phone.value)) errors.phone = 'Digite um WhatsApp com DDD, por exemplo (11) 90000-0000.';
-    return errors;
+    return validate(Object.fromEntries(ORDER.map(key => [key, inputs[key].value])));
   }
-  const emailHint = $('[data-ck="email-hint"]');
+  const emailSuggestion = $('[data-ck="email-suggestion"]');
+  const emailCorrection = $('[data-ck="email-correction"]');
+  const emailConfirmationHint = $('#dg-ck-email2-dica');
   function renderFields() {
     const errors = fieldErrors();
     ORDER.forEach((key) => {
@@ -124,19 +84,46 @@
       errorNodes[key].hidden = !message;
       if (message) inputs[key].setAttribute('aria-invalid', 'true'); else inputs[key].removeAttribute('aria-invalid');
     });
-    const emailMatches = !errors.email && !errors.emailConfirm;
-    emailHint.classList.toggle('is-ok', emailMatches);
-    emailHint.textContent = emailMatches
-      ? 'E-mails conferem. Seu acesso será enviado para este endereço.'
-      : 'Seu acesso será enviado para este e-mail.';
+    const emailsMatch = Boolean(normalizeEmail(inputs.email.value)) && !errors.emailConfirm;
+    const confirmationMessage = emailsMatch ? 'Os e-mails coincidem.' : 'Repita o endereço para evitar erros no seu acesso.';
+    if (emailConfirmationHint.textContent !== confirmationMessage) emailConfirmationHint.textContent = confirmationMessage;
+    emailConfirmationHint.classList.toggle('is-ok', emailsMatch);
+    inputs.emailConfirm.classList.toggle('is-confirmed', emailsMatch);
+    const suggestion = touched.email ? suggestEmail(inputs.email.value) : null;
+    emailSuggestion.hidden = !suggestion;
+    emailCorrection.textContent = suggestion || '';
     return errors;
   }
-  ORDER.forEach((key) => {
+  emailCorrection.addEventListener('click', () => {
+    const suggestion = suggestEmail(inputs.email.value);
+    if (!suggestion) return;
+    // A suggestion only: never change the destination without the person's action.
+    inputs.email.value = suggestion;
+    renderFields();
+    inputs.email.focus();
+  });
+  ORDER.forEach((key, index) => {
     inputs[key].addEventListener('input', () => {
-      if (key === 'phone') inputs.phone.value = maskPhone(inputs.phone.value);
+      // Give the person time to correct the field; validate again on blur/Next.
+      touched[key] = false;
       renderFields();
     });
-    inputs[key].addEventListener('blur', () => { touched[key] = true; renderFields(); });
+    inputs[key].addEventListener('change', renderFields); // Browser autofill.
+    inputs[key].addEventListener('blur', () => {
+      if (key === 'phone') inputs.phone.value = formatPhone(inputs.phone.value);
+      if (key === 'email' || key === 'emailConfirm') inputs[key].value = normalizeEmail(inputs[key].value) || inputs[key].value.trim();
+      if (key === 'name') inputs.name.value = normalizeName(inputs.name.value) || inputs.name.value;
+      touched[key] = true;
+      renderFields();
+    });
+    inputs[key].addEventListener('keydown', event => {
+      if (event.key !== 'Enter' || event.isComposing || index === ORDER.length - 1) return;
+      event.preventDefault();
+      touched[key] = true;
+      const errors = renderFields();
+      if (errors[key]) return;
+      inputs[ORDER[index + 1]].focus();
+    });
   });
 
   /* ── order bump, cupom e total ─────────────────────────────────────────── */
@@ -314,7 +301,7 @@
     if (Object.keys(errors).length) {
       ORDER.forEach((key) => { touched[key] = true; });
       renderFields();
-      notice('Preencha seu nome, e-mail e WhatsApp para continuar.');
+      notice('');
       inputs[ORDER.find((key) => errors[key])].focus();
       return;
     }
@@ -330,7 +317,7 @@
     let response = null, data = null;
     try {
       ({ response, data } = await postJson('/api/checkout', {
-        guest: { name: inputs.name.value, email: inputs.email.value, phone: inputs.phone.value },
+        guest: { name: normalizeName(inputs.name.value), email: normalizeEmail(inputs.email.value), phone: normalizePhone(inputs.phone.value) },
         bump: withBump,
         coupon: coupon ? coupon.code : undefined,
         utm: collectUtm(),
