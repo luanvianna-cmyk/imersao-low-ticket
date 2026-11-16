@@ -242,6 +242,29 @@
 
   /* ── abrir e fechar ────────────────────────────────────────────────────── */
   let busy = false, opener = null;
+  const countdown = $('[data-ck="countdown"]');
+  let countdownInterval = null, countdownDeadline = 0;
+  function stopCountdown() {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  function renderCountdown() {
+    const seconds = Math.max(0, Math.ceil((countdownDeadline - Date.now()) / 1000));
+    $('[data-ck="countdown-minutes"]').textContent = String(Math.floor(seconds / 60)).padStart(2, '0');
+    $('[data-ck="countdown-seconds"]').textContent = String(seconds % 60).padStart(2, '0');
+    countdown.setAttribute('aria-label', 'Contagem: ' + Math.floor(seconds / 60) + ' minuto e ' + (seconds % 60) + ' segundos');
+    if (!seconds) stopCountdown();
+  }
+  function startCountdown() {
+    stopCountdown();
+    if (!countdown) return;
+    countdownDeadline = Date.now() + 60000;
+    renderCountdown();
+    countdownInterval = setInterval(renderCountdown, 250);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (dialog.open && countdown) renderCountdown();
+  });
   function notice(message, info) {
     alertBox.textContent = message || '';
     alertBox.hidden = !message;
@@ -262,6 +285,7 @@
     opener = trigger || null;
     notice('');
     dialog.showModal();
+    startCountdown();
     measureViewport();
     if (bonusObserver && !bonusMotion.matches) bonusObserver.observe(bonusCard);
     document.documentElement.classList.add('dg-ck-open');
@@ -274,6 +298,7 @@
   /* A limpeza roda aqui, na hora, e não só no evento `close`: ele chega depois
      e a página não pode ficar com a rolagem travada nesse intervalo. */
   function afterClose() {
+    stopCountdown();
     bonusObserver?.disconnect();
     bonusCard?.classList.remove('is-celebrating');
     document.documentElement.classList.remove('dg-ck-open');

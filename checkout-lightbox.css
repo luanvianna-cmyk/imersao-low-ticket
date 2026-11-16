@@ -328,6 +328,15 @@ html.dg-ck-open{overflow:hidden}
 /* Final horizontal ebook cover: preserve the full artwork without cropping. */
 .dg-ck-bump-cover{aspect-ratio:16/9;object-fit:contain;box-shadow:none;border-radius:10px}
 
+/* One-minute visual countdown; never blocks registration or changes the offer. */
+.dg-ck-head>div{flex:1}
+.dg-ck-countdown{display:inline-flex;align-items:center;justify-content:center;flex:none;margin-left:auto;white-space:nowrap}
+@media(max-width:840px){
+ .dg-ck-identity{display:grid;grid-template-columns:1fr auto;gap:5px 10px}
+ .dg-ck-identity .dg-ck-eyebrow{grid-column:1/-1;grid-row:2;max-width:none}
+ .dg-ck-countdown{grid-column:2;grid-row:1}
+}
+
 /* Desktop purchase overview: use width before spending vertical space.
    Overflow stays available for browser zoom, validation and short windows. */
 @media(min-width:841px){
