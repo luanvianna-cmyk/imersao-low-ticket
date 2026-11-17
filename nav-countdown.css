@@ -1,5 +1,6 @@
 :root{scroll-padding-top:calc(var(--campaign-nav-height,76px) + 12px)}
-.campaign-nav .nav-inner{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:24px;min-height:76px;height:auto;padding-block:10px}
+.campaign-nav .nav-inner{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:24px;min-height:76px;height:auto;padding-block:10px}
+.campaign-nav .nav-inner>a:first-child{justify-self:start}
 .nav-countdown{display:flex;align-items:center;justify-content:center;gap:16px;min-width:0;color:var(--paper)}
 .nav-countdown-label{font:500 11px/1.4 var(--f-body);color:var(--muted)}
 .nav-countdown-label strong{color:var(--paper);font-weight:700}
@@ -11,9 +12,8 @@
 .nav-countdown-ended{color:var(--yellow);font:700 14px/1.3 var(--f-body)}
 .nav-countdown-ended[hidden]{display:none}
 @media(max-width:760px){
- .campaign-nav .nav-inner{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding-block:8px;min-height:0}
- .campaign-nav .nav-inner>a:first-child{grid-column:1;grid-row:1;justify-self:start}
- .campaign-nav .nav-cta{grid-column:2;grid-row:1;justify-self:end}
+ .campaign-nav .nav-inner{grid-template-columns:minmax(0,1fr);gap:8px 12px;padding-block:8px;min-height:0}
+ .campaign-nav .nav-inner>a:first-child{grid-column:1;grid-row:1;justify-self:center}
  .nav-countdown{grid-column:1/-1;grid-row:2;border-top:1px solid #ffffff10;padding-top:8px;gap:20px}
  .nav-countdown-label{font-size:10px;line-height:1.35}
  .nav-countdown-units{gap:5px}.nav-countdown-units>span{min-width:32px}
